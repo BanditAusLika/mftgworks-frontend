@@ -1,0 +1,2 @@
+/* App-level tweaks live mostly in styles.css. Keep this file minimal and safe. */
+#root{ min-height: 100vh; }

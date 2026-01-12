@@ -1,0 +1,57 @@
+:root{
+  --bg: #0b0d10;
+  --panel: rgba(255,255,255,0.06);
+  --panel-2: rgba(255,255,255,0.09);
+  --border: rgba(255,255,255,0.16);
+  --text: #e9eef5;
+  --muted: rgba(233,238,245,0.72);
+  --muted-2: rgba(233,238,245,0.58);
+  --brand: #7ee787;
+  --shadow: 0 14px 40px rgba(0,0,0,0.35);
+  --radius: 18px;
+  --radius-sm: 14px;
+
+  /* Typography: readable everywhere */
+  --fs-base: clamp(16px, 1.1vw + 12px, 20px);
+  --fs-small: clamp(13px, 0.7vw + 11px, 16px);
+  --fs-h1: clamp(30px, 2.4vw + 18px, 52px);
+  --fs-h2: clamp(22px, 1.6vw + 16px, 36px);
+  --fs-h3: clamp(18px, 1.1vw + 14px, 24px);
+  --lh: 1.55;
+}
+
+*{ box-sizing: border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  /* Cyber-noir gradient + subtle grid (matches the dark UI from your screenshots) */
+  background:
+    radial-gradient(1200px 700px at 10% 0%, rgba(126,231,135,0.12), transparent 55%),
+    radial-gradient(900px 550px at 100% 10%, rgba(126,231,135,0.10), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,0.03), transparent 28%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 52px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 52px),
+    var(--bg);
+  color: var(--text);
+  font-size: var(--fs-base);
+  line-height: var(--lh);
+  font-family: "Orbitron", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Better focus visibility on keyboard navigation */
+:focus-visible{
+  outline: 2px solid rgba(126,231,135,0.75);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+a{
+  color: inherit;
+  text-decoration: none;
+}
+a:hover{ text-decoration: underline; }
+
+img{ max-width:100%; display:block; }
+button, input, textarea{ font: inherit; color: inherit; }
