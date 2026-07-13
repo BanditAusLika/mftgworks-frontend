@@ -22,6 +22,9 @@ import {
   Send,
   ShieldCheck,
   Sparkles,
+  Radio,
+  ServerCog,
+  Zap,
   Wrench,
   X,
 } from "lucide-react";
@@ -30,6 +33,7 @@ const phoneDisplay = "0401 276 781";
 const phoneLink = "+61401276781";
 const businessEmail = "info-contact@mftgworks.org";
 const secondEmail = "ai.de.f2020@gmail.com";
+const whatsappLink = `https://wa.me/${phoneLink.replace("+", "")}?text=${encodeURIComponent("Hi Alex, I found MFTG IT Solutions online and need help with: ")}`;
 
 const services = [
   {
@@ -132,6 +136,16 @@ function Logo() {
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formState, setFormState] = useState("idle");
+  const [serviceChoice, setServiceChoice] = useState("");
+
+  const requestService = (service) => {
+    setServiceChoice(service);
+    setFormState("idle");
+    window.setTimeout(() => {
+      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.querySelector('input[name="name"]')?.focus({ preventScroll: true });
+    }, 250);
+  };
 
   const submitForm = async (event) => {
     event.preventDefault();
@@ -145,6 +159,7 @@ function App() {
       });
       if (!response.ok) throw new Error("Submission failed");
       event.currentTarget.reset();
+      setServiceChoice("");
       setFormState("success");
     } catch {
       setFormState("error");
@@ -155,7 +170,7 @@ function App() {
     <div className="siteShell" id="top">
       <a className="skipLink" href="#main">Skip to content</a>
 
-      <header className="siteHeader">
+      <header className="siteHeader" data-testid="site-header">
         <div className="container headerInner">
           <Logo />
           <button
@@ -167,7 +182,7 @@ function App() {
           >
             {menuOpen ? <X /> : <Menu />}
           </button>
-          <nav className={menuOpen ? "nav open" : "nav"} aria-label="Main navigation">
+          <nav className={menuOpen ? "nav open" : "nav"} aria-label="Main navigation" data-testid="main-navigation">
             <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
             <a href="#experience" onClick={() => setMenuOpen(false)}>Experience</a>
             <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
@@ -180,16 +195,17 @@ function App() {
       <main id="main">
         <section className="hero">
           <div className="heroGlow" aria-hidden="true" />
+          <div className="scanBeam" aria-hidden="true" />
           <div className="container heroGrid">
             <div className="heroCopy">
-              <div className="eyebrow"><span /> Mobile IT support across Melbourne</div>
-              <h1>Technology fixed.<br /><em>Business moving.</em></h1>
+              <div className="eyebrow"><span /> MFTG // Melbourne service network</div>
+              <h1>Technology fixed.<br /><em>Systems online.</em></h1>
               <p className="heroLead">
                 Practical IT support, computer repairs and business websites—delivered by a technician with commercial Dell field-service and enterprise deployment experience.
               </p>
               <div className="heroActions">
                 <a className="button primary" href={`tel:${phoneLink}`}><Phone size={18} /> Call {phoneDisplay}</a>
-                <a className="button secondary" href="#contact">Request a quote <ArrowRight size={18} /></a>
+                <button className="button secondary" type="button" onClick={() => requestService("")}>Request a quote <ArrowRight size={18} /></button>
               </div>
               <div className="heroProof" aria-label="Business highlights">
                 <span><BadgeCheck size={18} /> ABN registered</span>
@@ -200,10 +216,15 @@ function App() {
 
             <div className="heroVisual" aria-label="MFTG service overview">
               <div className="signalCard mainSignal">
-                <div className="signalTop"><span className="liveDot" /> SUPPORT AVAILABLE</div>
+                <div className="signalTop"><span className="liveDot" /> SUPPORT NODE ONLINE</div>
                 <div className="signalIcon"><MonitorCog /></div>
                 <h2>One technician.<br />Complete support.</h2>
                 <p>Hardware, software, networks and websites—without being passed between departments.</p>
+                <div className="systemReadout">
+                  <span><Radio /> STATUS</span><strong>READY</strong>
+                  <span><ServerCog /> COVERAGE</span><strong>MELBOURNE</strong>
+                  <span><Zap /> RESPONSE</span><strong>DIRECT</strong>
+                </div>
               </div>
               <div className="floatingChip chipOne"><ShieldCheck /> Practical security</div>
               <div className="floatingChip chipTwo"><Code2 /> Web solutions</div>
@@ -244,7 +265,7 @@ function App() {
                     <ul>
                       {service.points.map((point) => <li key={point}><Check size={15} /> {point}</li>)}
                     </ul>
-                    <a href="#contact">Discuss this service <ArrowRight size={16} /></a>
+                    <button className="serviceAction" type="button" onClick={() => requestService(service.title)}>Discuss this service <ArrowRight size={16} /></button>
                   </article>
                 );
               })}
@@ -298,7 +319,7 @@ function App() {
                 <div><Wrench /><span><strong>Dell trained</strong>Commercial hardware field service</span></div>
                 <div><Globe2 /><span><strong>Multilingual</strong>English, German & Serbian</span></div>
               </div>
-              <a className="textLink" href="#contact">Talk directly with Alex <ArrowRight size={17} /></a>
+              <button className="textLink" type="button" onClick={() => requestService("")}>Talk directly with Alex <ArrowRight size={17} /></button>
             </div>
           </div>
         </section>
@@ -360,6 +381,7 @@ function App() {
               <p>Describe the issue, the device or service you need, and your suburb. MFTG will reply with the best next step.</p>
               <div className="contactMethods">
                 <a href={`tel:${phoneLink}`}><Phone /><span><small>CALL OR TEXT</small><strong>{phoneDisplay}</strong></span></a>
+                <a href={whatsappLink} target="_blank" rel="noreferrer"><MessageSquareText /><span><small>WHATSAPP</small><strong>Start a direct chat</strong></span></a>
                 <a href={`mailto:${businessEmail}`}><Mail /><span><small>BUSINESS EMAIL</small><strong>{businessEmail}</strong></span></a>
                 <a href={`mailto:${secondEmail}`}><Mail /><span><small>SECONDARY EMAIL</small><strong>{secondEmail}</strong></span></a>
                 <div><MapPin /><span><small>SERVICE AREA</small><strong>Melbourne, Victoria</strong></span></div>
@@ -369,7 +391,7 @@ function App() {
 
             <div className="formPanel">
               <div className="formHeading"><div><small>REQUEST SUPPORT</small><h3>Tell me what you need</h3></div><Send /></div>
-              <form name="mftg-enquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={submitForm}>
+              <form name="mftg-enquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={submitForm} onChange={() => formState !== "idle" && setFormState("idle")} data-testid="enquiry-form">
                 <input type="hidden" name="form-name" value="mftg-enquiry" />
                 <p className="hiddenField"><label>Do not fill this out: <input name="bot-field" /></label></p>
                 <div className="fieldRow">
@@ -379,7 +401,7 @@ function App() {
                 <label><span>Email address *</span><input name="email" type="email" autoComplete="email" required /></label>
                 <label>
                   <span>What can I help with? *</span>
-                  <select name="service" required defaultValue="">
+                  <select name="service" required value={serviceChoice} onChange={(event) => setServiceChoice(event.target.value)}>
                     <option value="" disabled>Select a service</option>
                     <option>Business IT Support</option>
                     <option>Home IT Support</option>
@@ -400,6 +422,11 @@ function App() {
                 </div>
                 <p className="formNote"><ShieldCheck size={14} /> Your details are used only to respond to your enquiry.</p>
               </form>
+              <div className="formFallback">
+                <span>Prefer direct contact?</span>
+                <a href={`tel:${phoneLink}`}>Call now</a>
+                <a href={whatsappLink} target="_blank" rel="noreferrer">WhatsApp</a>
+              </div>
             </div>
           </div>
         </section>
