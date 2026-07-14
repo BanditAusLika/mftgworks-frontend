@@ -138,11 +138,13 @@ function App() {
   const [formState, setFormState] = useState("idle");
   const [serviceChoice, setServiceChoice] = useState("");
   const [formReference, setFormReference] = useState("");
+  const [formError, setFormError] = useState("");
 
   const requestService = (service) => {
     setServiceChoice(service);
     setFormState("idle");
     setFormReference("");
+    setFormError("");
     window.setTimeout(() => {
       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
       document.querySelector('input[name="name"]')?.focus({ preventScroll: true });
@@ -153,6 +155,7 @@ function App() {
     event.preventDefault();
     setFormState("sending");
     setFormReference("");
+    setFormError("");
     const form = event.currentTarget;
     const body = Object.fromEntries(new FormData(form).entries());
     try {
@@ -167,9 +170,17 @@ function App() {
       setServiceChoice("");
       setFormReference(result.reference || "");
       setFormState("success");
-    } catch {
+    } catch (error) {
+      setFormError(error instanceof Error ? error.message : "The enquiry could not be sent.");
       setFormState("error");
     }
+  };
+
+  const startAnotherEnquiry = () => {
+    setFormState("idle");
+    setFormReference("");
+    setFormError("");
+    window.setTimeout(() => document.querySelector('input[name="name"]')?.focus(), 50);
   };
 
   return (
@@ -231,10 +242,12 @@ function App() {
                   <span><ServerCog /> COVERAGE</span><strong>MELBOURNE</strong>
                   <span><Zap /> RESPONSE</span><strong>DIRECT</strong>
                 </div>
+                <div className="signalTags" aria-label="Support capabilities">
+                  <span><ShieldCheck /> Security</span>
+                  <span><MonitorCog /> Software</span>
+                  <span><HardDrive /> Hardware</span>
+                </div>
               </div>
-              <div className="floatingChip chipOne"><ShieldCheck /> Practical security</div>
-              <div className="floatingChip chipTwo"><MonitorCog /> Software installs</div>
-              <div className="floatingChip chipThree"><HardDrive /> Hardware repairs</div>
               <div className="orbitalLine" aria-hidden="true" />
             </div>
           </div>
@@ -396,39 +409,51 @@ function App() {
             </div>
 
             <div className="formPanel">
-              <div className="formHeading"><div><small>REQUEST SUPPORT</small><h3>Tell me what you need</h3></div><Send /></div>
-              <form name="mftg-enquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={submitForm} onChange={() => formState !== "idle" && setFormState("idle")} data-testid="enquiry-form">
-                <input type="hidden" name="form-name" value="mftg-enquiry" />
-                <input type="hidden" name="subject" value="New MFTG support enquiry" />
-                <p className="hiddenField"><label>Do not fill this out: <input name="bot-field" /></label></p>
-                <div className="fieldRow">
-                  <label><span>Your name *</span><input name="name" autoComplete="name" required /></label>
-                  <label><span>Phone number</span><input name="phone" type="tel" autoComplete="tel" /></label>
+              {formState === "success" ? (
+                <div className="formSuccess" role="status" aria-live="polite" data-testid="enquiry-success">
+                  <BadgeCheck size={54} />
+                  <small>ENQUIRY SECURED</small>
+                  <h3>Request received</h3>
+                  <p>Your details have been recorded successfully. MFTG will review the request and contact you directly.</p>
+                  {formReference && <strong>REFERENCE · {formReference}</strong>}
+                  <button className="button secondary" type="button" onClick={startAnotherEnquiry}>Send another enquiry</button>
                 </div>
-                <label><span>Email address *</span><input name="email" type="email" autoComplete="email" required /></label>
-                <label>
-                  <span>What can I help with? *</span>
-                  <select name="service" required value={serviceChoice} onChange={(event) => setServiceChoice(event.target.value)}>
-                    <option value="" disabled>Select a service</option>
-                    <option>Business IT Support</option>
-                    <option>PC &amp; Laptop Repairs</option>
-                    <option>Installations &amp; Upgrades</option>
-                    <option>Software Setup &amp; Recovery</option>
-                    <option>Wi-Fi &amp; Networking</option>
-                    <option>Custom PC Builds</option>
-                    <option>Something else</option>
-                  </select>
-                </label>
-                <label><span>Message *</span><textarea name="message" rows="5" placeholder="Device, problem, suburb and when you need help..." required /></label>
-                <button className="button primary submitButton" type="submit" disabled={formState === "sending"}>
-                  {formState === "sending" ? "Sending..." : "Send enquiry"} <ArrowRight size={18} />
-                </button>
-                <div className={`formStatus ${formState}`} aria-live="polite">
-                  {formState === "success" && <>Enquiry received securely. MFTG will be in touch.{formReference && <strong> Reference: {formReference}</strong>}</>}
-                  {formState === "error" && <>The form could not send. Please email <a href={`mailto:${businessEmail}`}>{businessEmail}</a>.</>}
-                </div>
-                <p className="formNote"><ShieldCheck size={14} /> Your details are used only to respond to your enquiry.</p>
-              </form>
+              ) : (
+                <>
+                  <div className="formHeading"><div><small>REQUEST SUPPORT</small><h3>Tell me what you need</h3></div><Send /></div>
+                  <form name="mftg-enquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={submitForm} onChange={() => { if (formState !== "idle") setFormState("idle"); if (formError) setFormError(""); }} data-testid="enquiry-form">
+                    <input type="hidden" name="form-name" value="mftg-enquiry" />
+                    <input type="hidden" name="subject" value="New MFTG support enquiry" />
+                    <p className="hiddenField"><label>Do not fill this out: <input name="bot-field" /></label></p>
+                    <div className="fieldRow">
+                      <label><span>Your name *</span><input name="name" autoComplete="name" required /></label>
+                      <label><span>Phone number</span><input name="phone" type="tel" autoComplete="tel" /></label>
+                    </div>
+                    <label><span>Email address *</span><input name="email" type="email" autoComplete="email" required /></label>
+                    <label>
+                      <span>What can I help with? *</span>
+                      <select name="service" required value={serviceChoice} onChange={(event) => setServiceChoice(event.target.value)}>
+                        <option value="" disabled>Select a service</option>
+                        <option>Business IT Support</option>
+                        <option>PC &amp; Laptop Repairs</option>
+                        <option>Installations &amp; Upgrades</option>
+                        <option>Software Setup &amp; Recovery</option>
+                        <option>Wi-Fi &amp; Networking</option>
+                        <option>Custom PC Builds</option>
+                        <option>Something else</option>
+                      </select>
+                    </label>
+                    <label><span>Message *</span><textarea name="message" rows="5" placeholder="Device, problem, suburb and when you need help..." required /></label>
+                    <button className="button primary submitButton" type="submit" disabled={formState === "sending"}>
+                      {formState === "sending" ? "Sending..." : "Send enquiry"} <ArrowRight size={18} />
+                    </button>
+                    <div className={`formStatus ${formState}`} aria-live="polite">
+                      {formState === "error" && <>{formError || "The form could not send."} Please email <a href={`mailto:${businessEmail}`}>{businessEmail}</a>.</>}
+                    </div>
+                    <p className="formNote"><ShieldCheck size={14} /> Your details are used only to respond to your enquiry.</p>
+                  </form>
+                </>
+              )}
               <div className="formFallback">
                 <span>Prefer direct contact?</span>
                 <a href={`tel:${phoneLink}`}>Call now</a>
