@@ -170,6 +170,9 @@ function App() {
       setServiceChoice("");
       setFormReference(result.reference || "");
       setFormState("success");
+      window.setTimeout(() => {
+        document.querySelector('[data-testid="enquiry-success"]')?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 80);
     } catch (error) {
       setFormError(error instanceof Error ? error.message : "The enquiry could not be sent.");
       setFormState("error");
