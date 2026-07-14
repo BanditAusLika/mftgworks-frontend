@@ -446,7 +446,7 @@ function App() {
                         <option>Something else</option>
                       </select>
                     </label>
-                    <label><span>Message *</span><textarea name="message" rows="5" placeholder="Device, problem, suburb and when you need help..." required /></label>
+                    <label><span>Message *</span><textarea name="message" rows="5" minLength="3" placeholder="Device, problem, suburb and when you need help..." required /></label>
                     <button className="button primary submitButton" type="submit" disabled={formState === "sending"}>
                       {formState === "sending" ? "Sending..." : "Send enquiry"} <ArrowRight size={18} />
                     </button>

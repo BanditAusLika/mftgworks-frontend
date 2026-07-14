@@ -64,8 +64,8 @@ export default async (req: Request, context: Context) => {
   if (!allowedServices.has(service)) {
     return jsonResponse({ ok: false, error: "Please select a valid service." }, 400);
   }
-  if (message.length < 10) {
-    return jsonResponse({ ok: false, error: "Please add a little more detail about the issue." }, 400);
+  if (message.length < 3) {
+    return jsonResponse({ ok: false, error: "Please enter a message." }, 400);
   }
 
   const formBody = new URLSearchParams({
