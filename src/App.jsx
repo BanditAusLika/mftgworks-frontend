@@ -45,24 +45,24 @@ const services = [
   },
   {
     icon: Laptop,
-    eyebrow: "FOR HOME",
-    title: "Home IT Support",
-    text: "Clear, patient help with slow computers, new devices, Wi-Fi, printers, software and technology that simply refuses to cooperate.",
-    points: ["PC and laptop help", "Wi-Fi and printers", "Setup and data transfer"],
+    eyebrow: "DIAGNOSE & REPAIR",
+    title: "PC & Laptop Repairs",
+    text: "Hands-on fault diagnosis and repair for computers that are slow, unstable, damaged or no longer starting correctly.",
+    points: ["Hardware diagnostics", "Laptop and desktop repairs", "Post-repair testing"],
   },
   {
     icon: Wrench,
-    eyebrow: "HARDWARE",
-    title: "Repairs & Upgrades",
-    text: "Commercial hardware experience applied to practical diagnosis, component replacement, upgrades and post-repair testing.",
-    points: ["SSD, RAM and batteries", "Hardware diagnostics", "Performance upgrades"],
+    eyebrow: "INSTALL & MAINTAIN",
+    title: "Installations & Upgrades",
+    text: "New computer installations, workstation rollouts, component upgrades, peripherals and preventative maintenance for homes and workplaces.",
+    points: ["Workstation installation", "SSD, RAM and batteries", "Maintenance and health checks"],
   },
   {
-    icon: Cpu,
-    eyebrow: "CUSTOM SYSTEMS",
-    title: "Custom PC Builds",
-    text: "Balanced systems designed around your actual workload, from gaming and content creation to reliable business desktops.",
-    points: ["Component selection", "Clean assembly", "Testing and optimisation"],
+    icon: MonitorCog,
+    eyebrow: "SOFTWARE SUPPORT",
+    title: "Software Setup & Recovery",
+    text: "Windows, drivers, applications, Microsoft 365, updates and system recovery configured cleanly and tested before handover.",
+    points: ["Windows and software installs", "Microsoft 365 and email", "Troubleshooting and recovery"],
   },
   {
     icon: Network,
@@ -72,11 +72,11 @@ const services = [
     points: ["Wi-Fi optimisation", "Router and device setup", "Network fault finding"],
   },
   {
-    icon: Code2,
-    eyebrow: "DIGITAL PRESENCE",
-    title: "Websites & Maintenance",
-    text: "Fast, responsive websites for Melbourne businesses, with domains, hosting, SSL, updates and ongoing maintenance handled properly.",
-    points: ["Business websites", "Hosting and SSL", "Repairs and maintenance"],
+    icon: Cpu,
+    eyebrow: "CUSTOM SYSTEMS",
+    title: "Custom PC Builds",
+    text: "Balanced systems designed around your workload, from gaming and content creation to reliable business desktops.",
+    points: ["Component selection", "Clean assembly", "Testing and optimisation"],
   },
 ];
 
@@ -116,8 +116,8 @@ const faqs = [
     a: "Yes. One-off help, project work and ongoing support are all available. The right option depends on the number of users, devices and the type of support required.",
   },
   {
-    q: "Can you build or fix my business website?",
-    a: "Yes. MFTG builds responsive small-business websites and can help with hosting, domains, SSL, website repairs, maintenance and contact forms.",
+    q: "Can you install software and maintain our computers?",
+    a: "Yes. MFTG can install and configure Windows applications, Microsoft 365, drivers, updates and peripherals, then provide scheduled health checks and practical ongoing maintenance.",
   },
 ];
 
@@ -137,10 +137,12 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formState, setFormState] = useState("idle");
   const [serviceChoice, setServiceChoice] = useState("");
+  const [formReference, setFormReference] = useState("");
 
   const requestService = (service) => {
     setServiceChoice(service);
     setFormState("idle");
+    setFormReference("");
     window.setTimeout(() => {
       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
       document.querySelector('input[name="name"]')?.focus({ preventScroll: true });
@@ -150,16 +152,20 @@ function App() {
   const submitForm = async (event) => {
     event.preventDefault();
     setFormState("sending");
-    const body = new URLSearchParams(new FormData(event.currentTarget)).toString();
+    setFormReference("");
+    const form = event.currentTarget;
+    const body = Object.fromEntries(new FormData(form).entries());
     try {
-      const response = await fetch("/__forms.html", {
+      const response = await fetch("/api/enquiry", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       });
-      if (!response.ok) throw new Error("Submission failed");
-      event.currentTarget.reset();
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.ok) throw new Error(result.error || "Submission failed");
+      form.reset();
       setServiceChoice("");
+      setFormReference(result.reference || "");
       setFormState("success");
     } catch {
       setFormState("error");
@@ -201,7 +207,7 @@ function App() {
               <div className="eyebrow"><span /> MFTG // Melbourne service network</div>
               <h1>Technology fixed.<br /><em>Systems online.</em></h1>
               <p className="heroLead">
-                Practical IT support, computer repairs and business websites—delivered by a technician with commercial Dell field-service and enterprise deployment experience.
+                Computer repairs, workstation installations, software setup and ongoing IT maintenance—delivered by a technician with commercial Dell field-service and enterprise deployment experience.
               </p>
               <div className="heroActions">
                 <a className="button primary" href={`tel:${phoneLink}`}><Phone size={18} /> Call {phoneDisplay}</a>
@@ -219,7 +225,7 @@ function App() {
                 <div className="signalTop"><span className="liveDot" /> SUPPORT NODE ONLINE</div>
                 <div className="signalIcon"><MonitorCog /></div>
                 <h2>One technician.<br />Complete support.</h2>
-                <p>Hardware, software, networks and websites—without being passed between departments.</p>
+                <p>Hardware, software, installations and networks—without being passed between departments.</p>
                 <div className="systemReadout">
                   <span><Radio /> STATUS</span><strong>READY</strong>
                   <span><ServerCog /> COVERAGE</span><strong>MELBOURNE</strong>
@@ -227,7 +233,7 @@ function App() {
                 </div>
               </div>
               <div className="floatingChip chipOne"><ShieldCheck /> Practical security</div>
-              <div className="floatingChip chipTwo"><Code2 /> Web solutions</div>
+              <div className="floatingChip chipTwo"><MonitorCog /> Software installs</div>
               <div className="floatingChip chipThree"><HardDrive /> Hardware repairs</div>
               <div className="orbitalLine" aria-hidden="true" />
             </div>
@@ -250,7 +256,7 @@ function App() {
                 <span className="sectionNumber">01 / SERVICES</span>
                 <h2>IT help that solves the whole problem.</h2>
               </div>
-              <p>From one frustrating laptop to a small office rollout, MFTG delivers clear advice, careful work and support matched to what you actually need.</p>
+              <p>From one frustrating laptop to a small office rollout, MFTG diagnoses, installs, repairs and maintains the technology you depend on.</p>
             </div>
             <div className="serviceGrid">
               {services.map((service, index) => {
@@ -348,7 +354,7 @@ function App() {
             <div className="proofList">
               <div><Check /><span><strong>Direct accountability</strong>No call-centre handoffs—you deal with the technician doing the work.</span></div>
               <div><Check /><span><strong>Commercial discipline</strong>Careful diagnostics, testing, documentation and customer confirmation.</span></div>
-              <div><Check /><span><strong>Broad capability</strong>Hardware, software, networking and websites handled together.</span></div>
+              <div><Check /><span><strong>Broad capability</strong>Hardware, software, installations and networking handled together.</span></div>
               <div><Check /><span><strong>Local and flexible</strong>On-site across Melbourne, with remote help where practical.</span></div>
             </div>
           </div>
@@ -393,6 +399,7 @@ function App() {
               <div className="formHeading"><div><small>REQUEST SUPPORT</small><h3>Tell me what you need</h3></div><Send /></div>
               <form name="mftg-enquiry" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={submitForm} onChange={() => formState !== "idle" && setFormState("idle")} data-testid="enquiry-form">
                 <input type="hidden" name="form-name" value="mftg-enquiry" />
+                <input type="hidden" name="subject" value="New MFTG support enquiry" />
                 <p className="hiddenField"><label>Do not fill this out: <input name="bot-field" /></label></p>
                 <div className="fieldRow">
                   <label><span>Your name *</span><input name="name" autoComplete="name" required /></label>
@@ -404,11 +411,11 @@ function App() {
                   <select name="service" required value={serviceChoice} onChange={(event) => setServiceChoice(event.target.value)}>
                     <option value="" disabled>Select a service</option>
                     <option>Business IT Support</option>
-                    <option>Home IT Support</option>
-                    <option>Computer Repair or Upgrade</option>
-                    <option>Custom PC Build</option>
-                    <option>Wi-Fi or Networking</option>
-                    <option>Website or Maintenance</option>
+                    <option>PC &amp; Laptop Repairs</option>
+                    <option>Installations &amp; Upgrades</option>
+                    <option>Software Setup &amp; Recovery</option>
+                    <option>Wi-Fi &amp; Networking</option>
+                    <option>Custom PC Builds</option>
                     <option>Something else</option>
                   </select>
                 </label>
@@ -417,7 +424,7 @@ function App() {
                   {formState === "sending" ? "Sending..." : "Send enquiry"} <ArrowRight size={18} />
                 </button>
                 <div className={`formStatus ${formState}`} aria-live="polite">
-                  {formState === "success" && "Thanks—your enquiry has been sent. MFTG will be in touch."}
+                  {formState === "success" && <>Enquiry received securely. MFTG will be in touch.{formReference && <strong> Reference: {formReference}</strong>}</>}
                   {formState === "error" && <>The form could not send. Please email <a href={`mailto:${businessEmail}`}>{businessEmail}</a>.</>}
                 </div>
                 <p className="formNote"><ShieldCheck size={14} /> Your details are used only to respond to your enquiry.</p>
@@ -434,8 +441,8 @@ function App() {
 
       <footer className="footer">
         <div className="container footerTop">
-          <div><Logo /><p>Mobile IT support, computer repairs and business websites across Melbourne.</p></div>
-          <div><strong>Services</strong><a href="#services">Business IT</a><a href="#services">Home IT</a><a href="#services">Repairs & upgrades</a><a href="#services">Websites</a></div>
+          <div><Logo /><p>Computer repairs, installations, software support and IT maintenance across Melbourne.</p></div>
+          <div><strong>Services</strong><a href="#services">Business IT</a><a href="#services">Computer repairs</a><a href="#services">Installations</a><a href="#services">Software support</a></div>
           <div><strong>Contact</strong><a href={`tel:${phoneLink}`}>{phoneDisplay}</a><a href={`mailto:${businessEmail}`}>{businessEmail}</a><a href={`mailto:${secondEmail}`}>{secondEmail}</a></div>
         </div>
         <div className="container footerBottom"><span>© {new Date().getFullYear()} MFTG IT Solutions. All rights reserved.</span><span>Melbourne, Victoria · ABN 99 186 061 741</span></div>
