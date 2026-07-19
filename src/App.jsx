@@ -124,7 +124,14 @@ const faqs = [
 function Logo() {
   return (
     <a className="brand" href="#top" aria-label="MFTG IT Solutions home">
-      <span className="brandMark">M</span>
+      <img
+        className="brandLogo"
+        src="/brand/mftg-logo.webp"
+        width="768"
+        height="768"
+        alt=""
+        aria-hidden="true"
+      />
       <span className="brandWords">
         <strong>MFTG</strong>
         <small>IT SOLUTIONS</small>
@@ -326,7 +333,9 @@ function App() {
             <div className="aboutVisual">
               <div className="techFrame">
                 <div className="frameLabel">MFTG / MELBOURNE</div>
-                <div className="coreMark"><span>M</span></div>
+                <div className="coreMark">
+                  <img src="/brand/mftg-logo.webp" width="768" height="768" alt="MFTG IT Solutions" />
+                </div>
                 <div className="techReadout"><Sparkles size={16} /> BUILT AROUND PRACTICAL SOLUTIONS</div>
               </div>
             </div>

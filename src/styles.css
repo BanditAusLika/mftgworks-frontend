@@ -56,11 +56,8 @@ img, svg { display: block; }
 }
 .headerInner { height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; flex-shrink: 0; color: white; }
-.brandMark {
-  width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px;
-  background: linear-gradient(135deg, var(--cyan), #a3ffc1); color: var(--navy); font: 800 25px/1 "Orbitron", sans-serif;
-  box-shadow: 0 0 22px rgba(0,255,102,.52), 0 0 55px rgba(0,255,102,.2);
-}
+.brandLogo { width: 58px; height: 58px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(0,255,102,.42)); transition: transform .22s ease, filter .22s ease; }
+.brand:hover .brandLogo { transform: scale(1.045); filter: drop-shadow(0 0 16px rgba(0,255,102,.62)); }
 .brandWords { display: flex; flex-direction: column; line-height: 1; }
 .brandWords strong { font: 700 19px/1 "Orbitron", sans-serif; letter-spacing: .06em; text-shadow: var(--glow-cyan); }
 .brandWords small { margin-top: 6px; color: #7da889; font-size: 9px; font-weight: 800; letter-spacing: .24em; }
@@ -193,9 +190,9 @@ h1 em { color: var(--cyan); font-style: normal; text-shadow: 0 0 14px rgba(0,255
 .techFrame::before, .techFrame::after { content: ""; position: absolute; inset: 16px; border: 1px solid rgba(0,255,102,.13); border-radius: 22px; }
 .techFrame::after { inset: auto -90px -140px auto; width: 320px; height: 320px; border-radius: 50%; border-color: rgba(0,255,102,.26); }
 .frameLabel { position: relative; z-index: 2; color: #819ea5; font-size: 10px; font-weight: 800; letter-spacing: .2em; }
-.coreMark { position: relative; z-index: 2; align-self: center; width: 180px; height: 180px; display: grid; place-items: center; border: 1px solid rgba(0,255,102,.34); border-radius: 50%; box-shadow: inset 0 0 60px rgba(0,255,102,.09), 0 0 60px rgba(0,255,102,.09); }
-.coreMark::before { content: ""; position: absolute; inset: 24px; border: 1px dashed rgba(0,255,102,.44); border-radius: 50%; }
-.coreMark span { position: relative; z-index: 2; color: var(--cyan); font: 700 92px/1 "Orbitron", sans-serif; text-shadow: 0 0 22px rgba(0,255,102,.65), 0 0 60px rgba(0,255,102,.34); }
+.coreMark { position: relative; z-index: 2; align-self: center; width: min(290px, 84%); aspect-ratio: 1; display: grid; place-items: center; }
+.coreMark::before { content: ""; position: absolute; inset: 10%; border: 1px solid rgba(0,255,102,.32); border-radius: 50%; box-shadow: inset 0 0 55px rgba(0,255,102,.07), 0 0 65px rgba(0,255,102,.11); }
+.coreMark img { position: relative; z-index: 2; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 20px rgba(0,255,102,.28)); }
 .techReadout { position: relative; z-index: 2; display: flex; align-items: center; gap: 9px; color: var(--cyan); font-size: 10px; font-weight: 800; letter-spacing: .11em; }
 .aboutCopy > p { color: var(--ink-soft); font-size: 17px; }
 .credentialGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 32px 0; }
@@ -309,6 +306,9 @@ h1 em { color: var(--cyan); font-style: normal; text-shadow: 0 0 14px rgba(0,255
 @media (max-width: 760px) {
   .container { width: min(100% - 28px, 1180px); }
   .headerInner { height: 70px; }
+  .brandLogo { width: 49px; height: 49px; }
+  .brandWords strong { font-size: 17px; }
+  .brandWords small { font-size: 8px; }
   .menuButton { display: block; }
   .nav { position: absolute; inset: 70px 14px auto; display: none; flex-direction: column; align-items: stretch; gap: 0; padding: 16px; border: 1px solid rgba(0,255,102,.24); border-radius: 16px; background: rgba(1,10,4,.99); box-shadow: 0 25px 60px rgba(0,0,0,.58), 0 0 34px rgba(0,255,102,.08); }
   .nav.open { display: flex; }
