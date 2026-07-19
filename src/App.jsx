@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   BadgeCheck,
@@ -121,9 +121,9 @@ const faqs = [
   },
 ];
 
-function Logo() {
+function Logo({ onOpen }) {
   return (
-    <a className="brand" href="#top" aria-label="MFTG IT Solutions home">
+    <button className="brand logoTrigger" type="button" onClick={onOpen} aria-label="Enlarge the MFTG IT Solutions logo">
       <img
         className="brandLogo"
         src="/brand/mftg-logo.webp"
@@ -136,7 +136,7 @@ function Logo() {
         <strong>MFTG</strong>
         <small>IT SOLUTIONS</small>
       </span>
-    </a>
+    </button>
   );
 }
 
@@ -146,6 +146,21 @@ function App() {
   const [serviceChoice, setServiceChoice] = useState("");
   const [formReference, setFormReference] = useState("");
   const [formError, setFormError] = useState("");
+  const [logoOpen, setLogoOpen] = useState(false);
+
+  useEffect(() => {
+    if (!logoOpen) return undefined;
+    const originalOverflow = document.body.style.overflow;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setLogoOpen(false);
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [logoOpen]);
 
   const requestService = (service) => {
     setServiceChoice(service);
@@ -199,7 +214,7 @@ function App() {
 
       <header className="siteHeader" data-testid="site-header">
         <div className="container headerInner">
-          <Logo />
+          <Logo onOpen={() => setLogoOpen(true)} />
           <button
             className="menuButton"
             type="button"
@@ -242,6 +257,9 @@ function App() {
             </div>
 
             <div className="heroVisual" aria-label="MFTG service overview">
+              <button className="heroBadgeLogo logoTrigger" type="button" onClick={() => setLogoOpen(true)} aria-label="Enlarge the MFTG IT Solutions logo">
+                <img src="/brand/mftg-logo.webp" width="768" height="768" alt="MFTG IT Solutions" />
+              </button>
               <div className="signalCard mainSignal">
                 <div className="signalTop"><span className="liveDot" /> SUPPORT NODE ONLINE</div>
                 <div className="signalIcon"><MonitorCog /></div>
@@ -333,9 +351,9 @@ function App() {
             <div className="aboutVisual">
               <div className="techFrame">
                 <div className="frameLabel">MFTG / MELBOURNE</div>
-                <div className="coreMark">
+                <button className="coreMark logoTrigger" type="button" onClick={() => setLogoOpen(true)} aria-label="Enlarge the MFTG IT Solutions logo">
                   <img src="/brand/mftg-logo.webp" width="768" height="768" alt="MFTG IT Solutions" />
-                </div>
+                </button>
                 <div className="techReadout"><Sparkles size={16} /> BUILT AROUND PRACTICAL SOLUTIONS</div>
               </div>
             </div>
@@ -418,6 +436,10 @@ function App() {
                 <div><MapPin /><span><small>SERVICE AREA</small><strong>Melbourne, Victoria</strong></span></div>
               </div>
               <p className="businessMeta">MFTG IT Solutions · ABN 99 186 061 741</p>
+              <button className="contactLogo logoTrigger" type="button" onClick={() => setLogoOpen(true)} aria-label="Enlarge the MFTG IT Solutions logo">
+                <img src="/brand/mftg-logo.webp" width="768" height="768" alt="MFTG IT Solutions" />
+                <span>Click to view the full emblem</span>
+              </button>
             </div>
 
             <div className="formPanel">
@@ -478,12 +500,24 @@ function App() {
 
       <footer className="footer">
         <div className="container footerTop">
-          <div><Logo /><p>Computer repairs, installations, software support and IT maintenance across Melbourne.</p></div>
+          <div><Logo onOpen={() => setLogoOpen(true)} /><p>Computer repairs, installations, software support and IT maintenance across Melbourne.</p></div>
           <div><strong>Services</strong><a href="#services">Business IT</a><a href="#services">Computer repairs</a><a href="#services">Installations</a><a href="#services">Software support</a></div>
           <div><strong>Contact</strong><a href={`tel:${phoneLink}`}>{phoneDisplay}</a><a href={`mailto:${businessEmail}`}>{businessEmail}</a><a href={`mailto:${secondEmail}`}>{secondEmail}</a></div>
         </div>
         <div className="container footerBottom"><span>© {new Date().getFullYear()} MFTG IT Solutions. All rights reserved.</span><span>Melbourne, Victoria · ABN 99 186 061 741</span></div>
       </footer>
+
+      {logoOpen && (
+        <div className="logoLightbox" role="dialog" aria-modal="true" aria-label="MFTG IT Solutions logo viewer" onClick={() => setLogoOpen(false)}>
+          <button className="logoLightboxClose" type="button" onClick={() => setLogoOpen(false)} aria-label="Close logo viewer" autoFocus>
+            <X size={28} />
+          </button>
+          <button className="logoLightboxStage" type="button" onClick={() => setLogoOpen(false)} aria-label="Close enlarged logo">
+            <img src="/brand/mftg-logo.webp" width="768" height="768" alt="MFTG IT Solutions" />
+            <span>Click the logo or background to close</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
