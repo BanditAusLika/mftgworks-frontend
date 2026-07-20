@@ -28,11 +28,11 @@ import {
   Wrench,
   X,
 } from "lucide-react";
+import { seoPageByPath, serviceAreas, servicePageLinks } from "./seoPages.js";
 
 const phoneDisplay = "0401 276 781";
 const phoneLink = "+61401276781";
 const businessEmail = "info-contact@mftgworks.org";
-const secondEmail = "ai.de.f2020@gmail.com";
 const whatsappLink = `https://wa.me/${phoneLink.replace("+", "")}?text=${encodeURIComponent("Hi Alex, I found MFTG IT Solutions online and need help with: ")}`;
 
 const services = [
@@ -40,6 +40,7 @@ const services = [
     icon: BriefcaseBusiness,
     eyebrow: "FOR SMALL BUSINESS",
     title: "Business IT Support",
+    slug: "business-it-support-melbourne",
     text: "On-site and remote support for workstations, Microsoft 365, email, printers, users and day-to-day technology issues.",
     points: ["New PC and user setup", "Microsoft 365 support", "On-call troubleshooting"],
   },
@@ -47,6 +48,7 @@ const services = [
     icon: Laptop,
     eyebrow: "DIAGNOSE & REPAIR",
     title: "PC & Laptop Repairs",
+    slug: "computer-repairs-melbourne",
     text: "Hands-on fault diagnosis and repair for computers that are slow, unstable, damaged or no longer starting correctly.",
     points: ["Hardware diagnostics", "Laptop and desktop repairs", "Post-repair testing"],
   },
@@ -54,6 +56,7 @@ const services = [
     icon: Wrench,
     eyebrow: "INSTALL & MAINTAIN",
     title: "Installations & Upgrades",
+    slug: "hardware-installations-upgrades-melbourne",
     text: "New computer installations, workstation rollouts, component upgrades, peripherals and preventative maintenance for homes and workplaces.",
     points: ["Workstation installation", "SSD, RAM and batteries", "Maintenance and health checks"],
   },
@@ -61,6 +64,7 @@ const services = [
     icon: MonitorCog,
     eyebrow: "SOFTWARE SUPPORT",
     title: "Software Setup & Recovery",
+    slug: "software-support-melbourne",
     text: "Windows, drivers, applications, Microsoft 365, updates and system recovery configured cleanly and tested before handover.",
     points: ["Windows and software installs", "Microsoft 365 and email", "Troubleshooting and recovery"],
   },
@@ -68,6 +72,7 @@ const services = [
     icon: Network,
     eyebrow: "CONNECTIVITY",
     title: "Wi-Fi & Networking",
+    slug: "network-troubleshooting-melbourne",
     text: "Troubleshooting and setup for routers, coverage problems, shared devices, connectivity and secure home or office networks.",
     points: ["Wi-Fi optimisation", "Router and device setup", "Network fault finding"],
   },
@@ -75,6 +80,7 @@ const services = [
     icon: Cpu,
     eyebrow: "CUSTOM SYSTEMS",
     title: "Custom PC Builds",
+    slug: "custom-pc-builds-melbourne",
     text: "Balanced systems designed around your workload, from gaming and content creation to reliable business desktops.",
     points: ["Component selection", "Clean assembly", "Testing and optimisation"],
   },
@@ -140,6 +146,218 @@ function Logo({ onOpen }) {
   );
 }
 
+function LogoLightbox({ open, onClose }) {
+  if (!open) return null;
+  return (
+    <div className="logoLightbox" role="dialog" aria-modal="true" aria-label="MFTG IT Solutions logo viewer" onClick={onClose}>
+      <button className="logoLightboxClose" type="button" onClick={onClose} aria-label="Close logo viewer" autoFocus>
+        <X size={28} />
+      </button>
+      <button className="logoLightboxStage" type="button" onClick={onClose} aria-label="Close enlarged logo">
+        <img src="/brand/mftg-logo.webp" width="768" height="768" alt="MFTG IT Solutions" />
+        <span>Click the logo or background to close</span>
+      </button>
+    </div>
+  );
+}
+
+function SiteHeader({ menuOpen, setMenuOpen, onLogoOpen, isHome = false }) {
+  const homePrefix = isHome ? "" : "/";
+  return (
+    <header className="siteHeader" data-testid="site-header">
+      <div className="container headerInner">
+        <Logo onOpen={onLogoOpen} />
+        <button
+          className="menuButton"
+          type="button"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X /> : <Menu />}
+        </button>
+        <nav className={menuOpen ? "nav open" : "nav"} aria-label="Main navigation" data-testid="main-navigation">
+          <a href={`${homePrefix}#services`} onClick={() => setMenuOpen(false)}>Services</a>
+          <a href={`${homePrefix}#experience`} onClick={() => setMenuOpen(false)}>Experience</a>
+          <a href="/service-areas-melbourne/" onClick={() => setMenuOpen(false)}>Service areas</a>
+          <a href={`${homePrefix}#faq`} onClick={() => setMenuOpen(false)}>FAQ</a>
+          <a className="navCta" href={`${homePrefix}#contact`} onClick={() => setMenuOpen(false)}>Get support <ArrowRight size={16} /></a>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function SiteFooter({ onLogoOpen }) {
+  return (
+    <footer className="footer">
+      <div className="container footerTop">
+        <div><Logo onOpen={onLogoOpen} /><p>Computer repairs, installations, software support and IT maintenance across Melbourne.</p></div>
+        <div>
+          <strong>Services</strong>
+          {servicePageLinks.slice(0, 6).map((page) => <a href={`/${page.slug}/`} key={page.slug}>{page.eyebrow.replace(" Melbourne", "")}</a>)}
+          <a href="/service-areas-melbourne/">Melbourne service areas</a>
+        </div>
+        <div><strong>Contact</strong><a href={`tel:${phoneLink}`}>{phoneDisplay}</a><a href={`mailto:${businessEmail}`}>{businessEmail}</a><span>Mobile service · No public shopfront</span></div>
+      </div>
+      <div className="container footerBottom"><span>© {new Date().getFullYear()} MFTG IT Solutions. All rights reserved.</span><span>Melbourne, Victoria · ABN 99 186 061 741</span></div>
+    </footer>
+  );
+}
+
+function setMeta(selector, value) {
+  const element = document.querySelector(selector);
+  if (element) element.setAttribute("content", value);
+}
+
+function updatePageMetadata(page) {
+  const url = `https://mftgworks.org/${page.slug}/`;
+  document.title = page.seoTitle;
+  setMeta('meta[name="description"]', page.description);
+  setMeta('meta[name="robots"]', "index, follow");
+  setMeta('meta[property="og:url"]', url);
+  setMeta('meta[property="og:title"]', page.seoTitle);
+  setMeta('meta[property="og:description"]', page.description);
+  setMeta('meta[name="twitter:title"]', page.seoTitle);
+  setMeta('meta[name="twitter:description"]', page.description);
+  document.querySelector('link[rel="canonical"]')?.setAttribute("href", url);
+
+  document.getElementById("page-structured-data")?.remove();
+  const schema = document.createElement("script");
+  schema.id = "page-structured-data";
+  schema.type = "application/ld+json";
+  schema.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": page.type === "areas" ? "WebPage" : "Service",
+        "@id": `${url}#${page.type === "areas" ? "webpage" : "service"}`,
+        name: page.eyebrow,
+        description: page.description,
+        url,
+        provider: { "@id": "https://mftgworks.org/#business" },
+        areaServed: { "@type": "City", name: "Melbourne" },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "https://mftgworks.org/" },
+          { "@type": "ListItem", position: 2, name: page.eyebrow, item: url },
+        ],
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: page.faqs.map(([question, answer]) => ({
+          "@type": "Question",
+          name: question,
+          acceptedAnswer: { "@type": "Answer", text: answer },
+        })),
+      },
+    ],
+  });
+  document.head.appendChild(schema);
+}
+
+function SeoLandingPage({ page, menuOpen, setMenuOpen, onLogoOpen, logoOpen, onLogoClose }) {
+  useEffect(() => {
+    updatePageMetadata(page);
+    window.scrollTo(0, 0);
+  }, [page]);
+
+  const relatedPages = servicePageLinks.filter((candidate) => candidate.slug !== page.slug).slice(0, 3);
+  return (
+    <div className="siteShell servicePageShell" id="top">
+      <a className="skipLink" href="#main">Skip to content</a>
+      <SiteHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} onLogoOpen={onLogoOpen} />
+      <main id="main">
+        <section className="serviceHero">
+          <div className="scanBeam" aria-hidden="true" />
+          <div className="container serviceHeroGrid">
+            <div>
+              <div className="eyebrow"><span /> {page.eyebrow}</div>
+              <h1>{page.title}</h1>
+              <p>{page.lead}</p>
+              <div className="heroActions">
+                <a className="button primary" href={`tel:${phoneLink}`}><Phone size={18} /> Call {phoneDisplay}</a>
+                <a className="button secondary" href="/#contact">Request a quote <ArrowRight size={18} /></a>
+              </div>
+            </div>
+            <aside className="serviceHeroPanel" aria-label="Service information">
+              <small>MFTG // SERVICE PROFILE</small>
+              <strong>On-site across Melbourne</strong>
+              <span>Remote support where practical</span>
+              <span>Direct contact with the technician</span>
+              <span>Scope confirmed before work begins</span>
+              <div><BadgeCheck /> ABN 99 186 061 741</div>
+            </aside>
+          </div>
+        </section>
+
+        <nav className="breadcrumb" aria-label="Breadcrumb">
+          <div className="container"><a href="/">Home</a><span>/</span><span aria-current="page">{page.eyebrow}</span></div>
+        </nav>
+
+        <section className="section serviceDetailSection">
+          <div className="container detailIntroGrid">
+            <div><span className="sectionNumber">THE SERVICE</span><h2>Support matched to the problem—not a generic package.</h2></div>
+            <div className="longCopy">{page.intro.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
+          </div>
+        </section>
+
+        <section className="section serviceScopeSection">
+          <div className="container scopeGrid">
+            <div>
+              <span className="sectionNumber">WHAT IS COVERED</span>
+              <h2>Practical help from diagnosis through verification.</h2>
+              <p>{page.proof}</p>
+            </div>
+            <ul>{page.scope.map((item) => <li key={item}><Check size={17} /> <span>{item}</span></li>)}</ul>
+          </div>
+        </section>
+
+        <section className="section audienceSection">
+          <div className="container">
+            <div className="sectionIntro splitIntro">
+              <div><span className="sectionNumber">WHO & WHERE</span><h2>{page.type === "areas" ? "Areas currently covered." : "Built for real Melbourne customers."}</h2></div>
+              <p>{page.type === "areas" ? "These locations describe the practical metropolitan coverage area; availability and travel are confirmed for every booking." : "The service is suitable for customers who want direct, accountable technical support and a clear explanation of the result."}</p>
+            </div>
+            <div className="audienceChips">{page.audiences.map((audience) => <span key={audience}><MapPin size={15} /> {audience}</span>)}</div>
+          </div>
+        </section>
+
+        <section className="section processSection serviceProcessSection">
+          <div className="container">
+            <div className="sectionIntro centeredIntro"><span className="sectionNumber">THE PROCESS</span><h2>Clear steps before chargeable work begins.</h2></div>
+            <div className="serviceProcessGrid">
+              {page.process.map(([title, text], index) => <article key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{text}</p></article>)}
+            </div>
+          </div>
+        </section>
+
+        <section className="section faqSection">
+          <div className="container faqGrid">
+            <div className="faqIntro"><span className="sectionNumber">SERVICE FAQ</span><h2>Useful details before booking.</h2><p>Send the problem in plain language. You do not need to diagnose it first.</p></div>
+            <div className="accordion">{page.faqs.map(([question, answer], index) => <details key={question} open={index === 0}><summary>{question}<ChevronDown /></summary><p>{answer}</p></details>)}</div>
+          </div>
+        </section>
+
+        <section className="section relatedSection">
+          <div className="container">
+            <div className="sectionIntro splitIntro"><div><span className="sectionNumber">RELATED SUPPORT</span><h2>More ways MFTG can help.</h2></div><p>Services can be combined when a problem involves hardware, software and connectivity.</p></div>
+            <div className="relatedGrid">{relatedPages.map((related) => <a href={`/${related.slug}/`} key={related.slug}><small>{related.eyebrow}</small><strong>{related.title}</strong><ArrowRight /></a>)}</div>
+          </div>
+        </section>
+
+        <section className="serviceCta">
+          <div className="container serviceCtaInner"><div><small>MFTG // MELBOURNE</small><h2>Tell me what needs to work.</h2><p>Include the device or site, the problem, your suburb and when you need assistance.</p></div><div><a className="button primary" href="/#contact">Request support <ArrowRight size={18} /></a><a className="button secondary" href={`mailto:${businessEmail}`}><Mail size={18} /> Email MFTG</a></div></div>
+        </section>
+      </main>
+      <SiteFooter onLogoOpen={onLogoOpen} />
+      <LogoLightbox open={logoOpen} onClose={onLogoClose} />
+    </div>
+  );
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [formState, setFormState] = useState("idle");
@@ -161,6 +379,22 @@ function App() {
       window.removeEventListener("keydown", closeOnEscape);
     };
   }, [logoOpen]);
+
+  const normalizedPath = window.location.pathname.replace(/\/+$/, "") || "/";
+  const activeSeoPage = seoPageByPath[normalizedPath];
+
+  if (activeSeoPage) {
+    return (
+      <SeoLandingPage
+        page={activeSeoPage}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+        onLogoOpen={() => setLogoOpen(true)}
+        logoOpen={logoOpen}
+        onLogoClose={() => setLogoOpen(false)}
+      />
+    );
+  }
 
   const requestService = (service) => {
     setServiceChoice(service);
@@ -212,27 +446,7 @@ function App() {
     <div className="siteShell" id="top">
       <a className="skipLink" href="#main">Skip to content</a>
 
-      <header className="siteHeader" data-testid="site-header">
-        <div className="container headerInner">
-          <Logo onOpen={() => setLogoOpen(true)} />
-          <button
-            className="menuButton"
-            type="button"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? <X /> : <Menu />}
-          </button>
-          <nav className={menuOpen ? "nav open" : "nav"} aria-label="Main navigation" data-testid="main-navigation">
-            <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
-            <a href="#experience" onClick={() => setMenuOpen(false)}>Experience</a>
-            <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
-            <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
-            <a className="navCta" href="#contact" onClick={() => setMenuOpen(false)}>Get support <ArrowRight size={16} /></a>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader menuOpen={menuOpen} setMenuOpen={setMenuOpen} onLogoOpen={() => setLogoOpen(true)} isHome />
 
       <main id="main">
         <section className="hero">
@@ -312,7 +526,10 @@ function App() {
                     <ul>
                       {service.points.map((point) => <li key={point}><Check size={15} /> {point}</li>)}
                     </ul>
-                    <button className="serviceAction" type="button" onClick={() => requestService(service.title)}>Discuss this service <ArrowRight size={16} /></button>
+                    <div className="serviceActions">
+                      <a className="serviceAction" href={`/${service.slug}/`}>Explore this service <ArrowRight size={16} /></a>
+                      <button className="serviceQuote" type="button" onClick={() => requestService(service.title)}>Request support</button>
+                    </div>
                   </article>
                 );
               })}
@@ -403,6 +620,20 @@ function App() {
           </div>
         </section>
 
+        <section className="section homeAreasSection" id="service-areas">
+          <div className="container homeAreasGrid">
+            <div>
+              <span className="sectionNumber">MELBOURNE SERVICE AREA</span>
+              <h2>Mobile support where Melbourne works and lives.</h2>
+              <p>MFTG provides on-site support across metropolitan Melbourne, with remote assistance Australia-wide for suitable software and configuration issues. Travel and timing are confirmed before booking.</p>
+              <a className="button secondary" href="/service-areas-melbourne/">View service-area details <ArrowRight size={18} /></a>
+            </div>
+            <div className="areaList" aria-label="Representative Melbourne service areas">
+              {serviceAreas.slice(0, 9).map((area) => <span key={area}><MapPin size={15} /> {area}</span>)}
+            </div>
+          </div>
+        </section>
+
         <section className="section faqSection" id="faq">
           <div className="container faqGrid">
             <div className="faqIntro">
@@ -432,7 +663,6 @@ function App() {
                 <a href={`tel:${phoneLink}`}><Phone /><span><small>CALL OR TEXT</small><strong>{phoneDisplay}</strong></span></a>
                 <a href={whatsappLink} target="_blank" rel="noreferrer"><MessageSquareText /><span><small>WHATSAPP</small><strong>Start a direct chat</strong></span></a>
                 <a href={`mailto:${businessEmail}`}><Mail /><span><small>BUSINESS EMAIL</small><strong>{businessEmail}</strong></span></a>
-                <a href={`mailto:${secondEmail}`}><Mail /><span><small>SECONDARY EMAIL</small><strong>{secondEmail}</strong></span></a>
                 <div><MapPin /><span><small>SERVICE AREA</small><strong>Melbourne, Victoria</strong></span></div>
               </div>
               <p className="businessMeta">MFTG IT Solutions · ABN 99 186 061 741</p>
@@ -498,26 +728,8 @@ function App() {
         </section>
       </main>
 
-      <footer className="footer">
-        <div className="container footerTop">
-          <div><Logo onOpen={() => setLogoOpen(true)} /><p>Computer repairs, installations, software support and IT maintenance across Melbourne.</p></div>
-          <div><strong>Services</strong><a href="#services">Business IT</a><a href="#services">Computer repairs</a><a href="#services">Installations</a><a href="#services">Software support</a></div>
-          <div><strong>Contact</strong><a href={`tel:${phoneLink}`}>{phoneDisplay}</a><a href={`mailto:${businessEmail}`}>{businessEmail}</a><a href={`mailto:${secondEmail}`}>{secondEmail}</a></div>
-        </div>
-        <div className="container footerBottom"><span>© {new Date().getFullYear()} MFTG IT Solutions. All rights reserved.</span><span>Melbourne, Victoria · ABN 99 186 061 741</span></div>
-      </footer>
-
-      {logoOpen && (
-        <div className="logoLightbox" role="dialog" aria-modal="true" aria-label="MFTG IT Solutions logo viewer" onClick={() => setLogoOpen(false)}>
-          <button className="logoLightboxClose" type="button" onClick={() => setLogoOpen(false)} aria-label="Close logo viewer" autoFocus>
-            <X size={28} />
-          </button>
-          <button className="logoLightboxStage" type="button" onClick={() => setLogoOpen(false)} aria-label="Close enlarged logo">
-            <img src="/brand/mftg-logo.webp" width="768" height="768" alt="MFTG IT Solutions" />
-            <span>Click the logo or background to close</span>
-          </button>
-        </div>
-      )}
+      <SiteFooter onLogoOpen={() => setLogoOpen(true)} />
+      <LogoLightbox open={logoOpen} onClose={() => setLogoOpen(false)} />
     </div>
   );
 }

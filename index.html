@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#03070d" />
     <meta name="robots" content="index, follow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="canonical" href="https://mftgworks.org/" />
     <link rel="icon" type="image/png" href="/brand/mftg-icon.png" />
     <link rel="apple-touch-icon" href="/brand/mftg-icon.png" />
@@ -26,24 +28,52 @@
     <meta name="twitter:description" content="Practical computer repairs, installations and software support across Melbourne." />
     <meta name="twitter:image" content="https://mftgworks.org/og.jpg" />
 
-    <script type="application/ld+json">
+    <script id="site-structured-data" type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
+        "@id": "https://mftgworks.org/#business",
         "name": "MFTG IT Solutions",
+        "legalName": "MFTG IT Solutions",
         "url": "https://mftgworks.org/",
-        "telephone": "+61 401 276 781",
+        "logo": "https://mftgworks.org/brand/mftg-logo.png",
+        "image": "https://mftgworks.org/og.jpg",
+        "telephone": "+61401276781",
         "email": "info-contact@mftgworks.org",
         "description": "Computer repairs, workstation installations, software setup, upgrades, networking and IT maintenance across Melbourne.",
-        "founder": { "@type": "Person", "name": "Srdan Alex Radenovic" },
-        "areaServed": { "@type": "City", "name": "Melbourne" },
+        "identifier": {
+          "@type": "PropertyValue",
+          "propertyID": "Australian Business Number",
+          "value": "99 186 061 741"
+        },
+        "founder": {
+          "@type": "Person",
+          "name": "Srđan (Alex) Rađenović",
+          "knowsLanguage": ["English", "German", "Serbian"]
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Melbourne" },
+          { "@type": "AdministrativeArea", "name": "Metropolitan Melbourne" }
+        ],
         "address": { "@type": "PostalAddress", "addressLocality": "Melbourne", "addressRegion": "VIC", "addressCountry": "AU" },
         "contactPoint": {
           "@type": "ContactPoint",
-          "telephone": "+61 401 276 781",
+          "telephone": "+61401276781",
           "contactType": "customer support",
-          "areaServed": "AU",
+          "areaServed": "Melbourne",
           "availableLanguage": ["English", "German", "Serbian"]
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "IT services",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Business IT Support", "url": "https://mftgworks.org/business-it-support-melbourne/" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Computer and Laptop Repairs", "url": "https://mftgworks.org/computer-repairs-melbourne/" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Computer Installations and Upgrades", "url": "https://mftgworks.org/hardware-installations-upgrades-melbourne/" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Software Installation and Support", "url": "https://mftgworks.org/software-support-melbourne/" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wi-Fi and Network Troubleshooting", "url": "https://mftgworks.org/network-troubleshooting-melbourne/" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom PC Builds", "url": "https://mftgworks.org/custom-pc-builds-melbourne/" } }
+          ]
         },
         "sameAs": ["https://github.com/BanditAusLika"]
       }
