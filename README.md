@@ -24,6 +24,6 @@ Netlify builds the project with `npm run build` and publishes the `dist` directo
 
 ## Contact
 
-- Phone: 0401 276 781
+- Phone: 0402 940 099
 - Business email: info-contact@mftgworks.org
 - Website: https://mftgworks.org

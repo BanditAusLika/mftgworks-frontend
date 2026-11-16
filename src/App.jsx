@@ -30,8 +30,8 @@ import {
 } from "lucide-react";
 import { seoPageByPath, serviceAreas, servicePageLinks } from "./seoPages.js";
 
-const phoneDisplay = "0401 276 781";
-const phoneLink = "+61401276781";
+const phoneDisplay = "0402 940 099";
+const phoneLink = "+61402940099";
 const businessEmail = "info-contact@mftgworks.org";
 const whatsappLink = `https://wa.me/${phoneLink.replace("+", "")}?text=${encodeURIComponent("Hi Alex, I found MFTG IT Solutions online and need help with: ")}`;
 
@@ -83,6 +83,14 @@ const services = [
     slug: "custom-pc-builds-melbourne",
     text: "Balanced systems designed around your workload, from gaming and content creation to reliable business desktops.",
     points: ["Component selection", "Clean assembly", "Testing and optimisation"],
+  },
+  {
+    icon: MonitorCog,
+    eyebrow: "WEB ENGINEERING",
+    title: "Custom Websites, Booking Systems & Business Automation",
+    slug: "web-development-business-automation-melbourne",
+    text: "Give customers a quicker way to book, request a quote or place an enquiry. Connect the details to the tools your team already uses.",
+    points: ["React and Node.js websites", "Booking and quote systems", "Python workflow automation"],
   },
 ];
 
@@ -457,7 +465,7 @@ function App() {
               <div className="eyebrow"><span /> MFTG // Melbourne service network</div>
               <h1>Technology fixed.<br /><em>Systems online.</em></h1>
               <p className="heroLead">
-                Computer repairs, workstation installations, software setup and ongoing IT maintenance—delivered by a technician with commercial Dell field-service and enterprise deployment experience.
+                Computer repairs, workstation rollouts and Microsoft 365 support across Melbourne. I also build websites, booking systems and Python automations for local businesses.
               </p>
               <div className="heroActions">
                 <a className="button primary" href={`tel:${phoneLink}`}><Phone size={18} /> Call {phoneDisplay}</a>
@@ -536,6 +544,26 @@ function App() {
             </div>
           </div>
         </section>
+
+        <section className="section" id="portfolio">
+          <div className="container">
+            <h2>Melbourne client portfolio</h2>
+            <div className="portfolioGrid">
+              <article className="serviceCard"><img loading="lazy" src="/brand/mba.jpg" alt="MBA Cleaning Services website homepage" /><h3>MBA Cleaning Services</h3>
+                <p>A React website for a Deer Park cleaning team. Customers can inspect completed work and send the property details MBA needs to quote.</p>
+                <a className="serviceAction" href="https://mbacleaningservice.com/">Visit MBA Cleaning Services <ArrowRight size={16} /></a></article>
+              <article className="serviceCard"><img loading="lazy" src="/brand/ramonda.jpg" alt="Ramonda Natalie catering website homepage" /><h3>Ramonda Natalie</h3>
+                <p>A handmade Yugoslav pastry catalogue with occasion enquiries routed through Netlify Forms to Natalija’s Melbourne kitchen.</p>
+                <a className="serviceAction" href="https://ramondanatalie.com/">Visit Ramonda Natalie <ArrowRight size={16} /></a></article>
+            </div>
+          </div>
+        </section>
+        <section className="section" id="business-care"><div className="container">
+          <h2>MFTG Complete Business Care</h2><p><strong>A$299 per month</strong></p>
+          <p>Website maintenance, Microsoft 365 email and account security, and priority access to on-site hardware support across Melbourne’s west.</p>
+          <div className="heroActions"><button className="button primary" onClick={() => requestService("MFTG Complete Business Care")}>Discuss business care</button>
+          <a className="button secondary" href="/managed-it-support-melbourne-west/">View service details</a></div>
+        </div></section>
 
         <section className="section experienceSection" id="experience">
           <div className="container">
@@ -698,12 +726,8 @@ function App() {
                       <span>What can I help with? *</span>
                       <select name="service" required value={serviceChoice} onChange={(event) => setServiceChoice(event.target.value)}>
                         <option value="" disabled>Select a service</option>
-                        <option>Business IT Support</option>
-                        <option>PC &amp; Laptop Repairs</option>
-                        <option>Installations &amp; Upgrades</option>
-                        <option>Software Setup &amp; Recovery</option>
-                        <option>Wi-Fi &amp; Networking</option>
-                        <option>Custom PC Builds</option>
+                        {services.map(({ title }) => <option key={title}>{title}</option>)}
+                        <option>MFTG Complete Business Care</option>
                         <option>Something else</option>
                       </select>
                     </label>

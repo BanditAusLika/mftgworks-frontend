@@ -15,6 +15,96 @@ export const serviceAreas = [
 
 export const seoPages = [
   {
+  "slug": "managed-it-support-melbourne-west",
+  "title": "Managed IT support in Melbourne West",
+  "eyebrow": "Managed IT support in Melbourne West",
+  "seoTitle": "Managed IT support in Melbourne West | MFTG IT Solutions",
+  "description": "MFTG Complete Business Care brings website maintenance, Microsoft 365 and priority hardware support together for A$299 per month.",
+  "lead": "MFTG Complete Business Care brings website maintenance, Microsoft 365 and priority hardware support together for A$299 per month.",
+  "intro": [
+    "MFTG Complete Business Care brings website maintenance, Microsoft 365 and priority hardware support together for A$299 per month.",
+    "Tell Alex how your team works and which systems you depend on."
+  ],
+  "audiences": [
+    "Deanside",
+    "Deer Park",
+    "Sunshine",
+    "Derrimut",
+    "Truganina"
+  ],
+  "scope": [
+    "Website maintenance",
+    "Microsoft 365 email and account security",
+    "Priority access to on-site hardware support"
+  ],
+  "process": [
+    [
+      "Discuss",
+      "Describe the job and your preferred timing."
+    ],
+    [
+      "Scope",
+      "Agree the deliverables and costs."
+    ],
+    [
+      "Handover",
+      "Test the agreed work with your team."
+    ]
+  ],
+  "proof": "Direct access to a Melbourne developer with commercial Dell field-service experience.",
+  "faqs": [
+    [
+      "What does onboarding involve?",
+      "We review your website, accounts and devices and confirm the scope, visit arrangements and any third-party costs before starting."
+    ]
+  ]
+},
+  {
+  "slug": "web-development-business-automation-melbourne",
+  "title": "Web development and business automation in Melbourne",
+  "eyebrow": "Web development and business automation in Melbourne",
+  "seoTitle": "Web development and business automation in Melbourne | MFTG IT Solutions",
+  "description": "Turn quote requests, bookings and manual paperwork into a workflow your team can use.",
+  "lead": "Turn quote requests, bookings and manual paperwork into a workflow your team can use.",
+  "intro": [
+    "Turn quote requests, bookings and manual paperwork into a workflow your team can use.",
+    "Tell Alex how your team works and which systems you depend on."
+  ],
+  "audiences": [
+    "Deanside",
+    "Deer Park",
+    "Sunshine",
+    "Derrimut",
+    "Truganina"
+  ],
+  "scope": [
+    "Mobile-friendly websites and enquiry forms",
+    "Booking systems and quote calculators",
+    "Python scripts and API integrations"
+  ],
+  "process": [
+    [
+      "Discuss",
+      "Describe the job and your preferred timing."
+    ],
+    [
+      "Scope",
+      "Agree the deliverables and costs."
+    ],
+    [
+      "Handover",
+      "Test the agreed work with your team."
+    ]
+  ],
+  "proof": "Direct access to a Melbourne developer with commercial Dell field-service experience.",
+  "faqs": [
+    [
+      "Can you work with our existing system?",
+      "Yes. We first review its export or API options and agree on the handover process."
+    ]
+  ]
+},
+  {
     slug: "business-it-support-melbourne",
     eyebrow: "Business IT Support Melbourne",
     title: "Practical IT support for Melbourne businesses.",

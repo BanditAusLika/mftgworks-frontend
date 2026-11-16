@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Section from "./Section.jsx";
 
 const NAME = "S. Alex Radenovic";
-const PHONE = "+61401276781";
-const PHONE_DISPLAY = "+61 401 276 781";
+const PHONE = "+61402940099";
+const PHONE_DISPLAY = "+61 402 940 099";
 const EMAIL = "info-contact@mftgworks.org";
 const ABN = "99186061741";
 
