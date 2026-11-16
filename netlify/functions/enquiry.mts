@@ -7,6 +7,8 @@ const allowedServices = new Set([
   "Software Setup & Recovery",
   "Wi-Fi & Networking",
   "Custom PC Builds",
+  "Custom Websites, Booking Systems & Business Automation",
+  "MFTG Complete Business Care",
   "Something else",
 ]);
 
